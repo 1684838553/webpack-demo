@@ -13,7 +13,7 @@
 
 如果还想在开发环境下启用 CSS 优化，请将 optimization.minimize 设置为 true
 
-### 4. regeneratorRuntime插件
+## 4. regeneratorRuntime插件
 
 `regeneratorRuntime`是webpack打包生成的全局辅助含糊，有babel生成，用于兼容async/await语法
 
