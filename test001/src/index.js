@@ -4,8 +4,10 @@ import logoSvg from './assets/pear.svg'
 import demoText from './assets/demo.txt'
 import './style.css'
 import './style.less'
-import Data from './assets/data.xml'
-import Notes from './assets/data.csv'
+// import Data from './assets/data.xml'
+// import Notes from './assets/data.csv'
+import _ from 'lodash'
+import './async-module.js'
 
 helloword()
 
@@ -35,4 +37,5 @@ span.innerHTML = '&#xec66;'
 document.body.appendChild(span)
 
 
-console.log(Data, Notes)
+// console.log(Data, Notes)
+console.log(_.join(['index', 'module', 'loaded!'], ' '))
