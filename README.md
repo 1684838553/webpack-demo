@@ -44,5 +44,8 @@ npm i csv-loader xml-loader -D
 npm i babel-loader @babel/core @babel/preset-env -D
 npm i @babel/runtime -D
 npm i @babel/plugin-transform-runtime -D
+
+
+npm i lodash -D
 ```
 
