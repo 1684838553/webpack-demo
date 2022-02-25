@@ -4,9 +4,31 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 
 module.exports = {
-    entry: './src/index.js',
+    // 方法一
+    // entry: './src/index.js',
+    // 方法二 双入口文件 
+    // entry: {
+    //     index: './src/index.js',
+    //     another: './src/another-module.js'
+    // },
+    // 方法三 将共有的lodash抽成一个单独的chunk
+    entry: {
+        index: {
+            import: './src/index.js',
+            dependOn: 'shared'
+        },
+        another: {
+            import: './src/another-module.js',
+            dependOn: 'shared'
+        },
+        shared: 'lodash'
+    },
+    // contenthash 文件内容不变，哈希字符串也不会变，便于浏览器监听文件是否修改，为修改可以直接使用缓存
     output: {
-        filename: 'bundle.js',
+        // filename: 'bundle.js',
+        // filename: '[name].[contenthash].js',
+        // 将编译好的js文件单独放在一个文件夹里面
+        filename: 'scripts/[name].[contenthash].js',
         path: path.resolve(__dirname, './dist'),
         clean: true,  // 每次打包前清理dist
         // 配置静态资源打包后的路径，contenthash根据内容生成hash名，ext生成相应的后缀名
@@ -103,5 +125,20 @@ module.exports = {
             // 优化和压缩 CSS,生产环境
             new CssMinimizerPlugin()
         ],
+        // entry 使用第二种方法时，配置该属性，也能抽离出共有的chunk
+        // splitChunks: {
+        //     chunks: 'all'
+        // },
+        splitChunks: {
+            // 将第三方库，如lodash提取到单独的vendor chunk文件中，它们很少
+            // 想本地的源代码那样频繁的修改，可以利用客户端的长缓存机制，命中缓存来消除请求，
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all'
+                }
+            }
+        }
     }
 }
