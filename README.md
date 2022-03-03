@@ -90,3 +90,69 @@ npm i webpack-merge -D
 6. cheap-module-source-map： 原始代码（只有行内） 与上面一样除了每行特点的从loader中进行映射
 
 7. source-map： 原始代码最好的sourcemap质量有完整的结果，但是会很慢。
+
+**`注意:生产环境一般不开启sourcemap功能，原因：`**
+
+1. 通过bundle和sourcemap文件，可以反编译出源码，即线上产物有sourcemap文件的话，有暴露源码风险
+
+2. sourcemap文件体积相对较大，生产环境追求更小更轻量的bundle
+
+## [devServer](https://webpack.docschina.org/configuration/dev-server/)
+
+1. static
+
+2. proxy 启用代理
+
+```javascript
+module.exports = {
+  devServer: {
+    proxy: {
+      '/api': 'http://localhost:3000',
+    },
+  },
+};
+```
+
+3. port 指定监听的端口号
+
+4. open 在服务器已经启动后打开浏览器。设置其为 true 以打开你的默认浏览器
+
+5. onListening 在 webpack-dev-server 开始监听端口连接时执行自定义函数的能力。
+
+```javascript
+module.exports = {
+  //...
+  devServer: {
+    onListening: function (devServer) {
+      if (!devServer) {
+        throw new Error('webpack-dev-server is not defined');
+      }
+
+      const port = devServer.server.address().port;
+      console.log('Listening on port:', port);
+    },
+  },
+};
+```
+
+6. host 指定要使用的 host
+
+```javascript
+// 如果你想让你的服务器可以被外部访问，像这样指定：
+
+module.exports = {
+  devServer: {
+    host: '0.0.0.0',
+  },
+};
+```
+
+7. headers 为所有响应添加headers
+
+8. https `boolean ` 默认情况下，开发服务器将通过 HTTP 提供服务。
+
+9. http2 `boolean ` HTTP/2 带有自签名证书 `ssl`
+
+10. compress
+
+11. ...
