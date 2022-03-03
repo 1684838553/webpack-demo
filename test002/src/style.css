@@ -1,0 +1,19 @@
+/* 自定义iconfont字体 */
+@font-face {
+    font-family: 'iconfont';
+    src: url('./assets/iconfont.ttf') format('truetype');
+}
+
+
+.hello {
+    color: red;
+}
+
+.block-bg {
+    background-image: url(./assets/pear.svg) !important;
+}
+
+.icon {
+    font-family: 'iconfont';
+    font-size: 30px;
+}
