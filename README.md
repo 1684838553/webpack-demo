@@ -62,6 +62,9 @@ npm i lodash -D
 npm i terser-webpack-plugin -D
 
 npm i webpack-merge -D
+
+npm i eslint -D
+npx eslint --init
 ```
 
 ## source-map
@@ -156,3 +159,25 @@ module.exports = {
 10. compress
 
 11. ...
+
+## 热替换和热加载
+
+- `热替换`:允许在运行时更新所有类型的模块，而无需完全刷新
+
+
+```javascript
+// 如果你想让你的服务器可以被外部访问，像这样指定：
+
+module.exports = {
+  devServer: {
+    // 时时进行更新和替换
+   hot:true,
+   liveReload: true
+  },
+};
+```
+
+## eslint
+
+- 提供一个插件化的javascript代码检测工具。
+
