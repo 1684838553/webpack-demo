@@ -29,6 +29,12 @@
 
 提供了一个merge连接数组和合并对象创建新对象的函数
 
+### 7. [BundleAnalyzerPlugin](https://www.npmjs.com/package/webpack-bundle-analyzer) 
+
+1. 了解捆绑包中的真正内容 
+2. 找出哪些模块构成了其最大的尺寸 
+3. 查找错误到达的模块
+
 ### 插件安装命令
 
 ```
@@ -65,6 +71,12 @@ npm i webpack-merge -D
 
 npm i eslint -D
 npx eslint --init
+
+npm i webpack-bundle-analyzer -D
+
+
+npm i typescript ts-loader -D
+npx tsc --init // 生成tsconfig.json文件
 ```
 
 ## source-map
@@ -180,4 +192,9 @@ module.exports = {
 ## eslint
 
 - 提供一个插件化的javascript代码检测工具。
+
+
+
+
+
 
