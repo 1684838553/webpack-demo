@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = {
     entry: {
@@ -17,6 +18,21 @@ module.exports = {
         clean: true,  // 每次打包前清理dist
         // 配置静态资源打包后的路径，contenthash根据内容生成hash名，ext生成相应的后缀名
         assetModuleFilename: 'image/[contenthash][ext]',
+    },
+    resolve: {
+        // alias: {
+        //     // 相对路径，@从src目录下查找文件
+        //     "@": path.resolve(__dirname, './src')
+        // },
+        // webpack会按照数组顺序去解析这些后缀名，对于同名的文件，webpack总是会先解析列在数组首位的后缀名的文件。
+        extensions: ['.json', '.js', '.vue']
+    },
+    externalsType: 'script',
+    externals: {
+        jquery: [
+            'https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js',
+            '$'
+        ],
     },
     devServer: {
         static: './dist',
@@ -40,7 +56,8 @@ module.exports = {
         // 将 CSS 提取到单独的文件中
         new MiniCssExtractPlugin({
             filename: 'styles/[contenthash].css'
-        })
+        }),
+        new BundleAnalyzerPlugin()
     ],
     module: {
         rules: [
