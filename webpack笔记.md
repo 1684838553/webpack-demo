@@ -396,7 +396,7 @@ self.onmessage = ({ data: { question } }) => {
     })
 }
 ```
-###### // 下面的代码属于业务逻辑
+// 下面的代码属于业务逻辑
 
 ```javascript
 const worker = new Worker(new URL('./work.js', import.meta.url));
