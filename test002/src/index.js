@@ -8,8 +8,14 @@ import './style.less'
 // import Notes from './assets/data.csv'
 import _ from 'lodash'
 import './async-module.js'
+import { craeteSpanElement } from './createElement'
+import $ from 'jquery'
 
-helloword()
+console.log($)
+
+// helloword()
+// webpack 配置 resolve.extensions，同名文件，先执行文件后缀在数组索引小的
+console.log(helloword)
 
 const img = document.createElement('img')
 img.src = imgSrc
@@ -39,3 +45,20 @@ document.body.appendChild(span)
 
 // console.log(Data, Notes)
 console.log(_.join(['index', 'module', 'loaded!'], ' '))
+
+
+fetch('/api/hello')
+    .then(res => res.text())
+    .then(res => {
+        console.log(res, 'res')
+        craeteSpanElement(res)
+    })
+
+
+const worker = new Worker(new URL('./work.js', import.meta.url));
+worker.postMessage({
+    question: 'hi，那边的workder线程，请告诉我今天的幸运数字是多少？',
+});
+worker.onmessage = ({ data: { answer } }) => {
+    console.log(answer);
+};
