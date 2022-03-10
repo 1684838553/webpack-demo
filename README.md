@@ -77,6 +77,8 @@ npm i webpack-bundle-analyzer -D
 
 npm i typescript ts-loader -D
 npx tsc --init // 生成tsconfig.json文件
+
+npm i workbox-webpack-plugin -D
 ```
 
 ## source-map
