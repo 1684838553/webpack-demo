@@ -4,15 +4,11 @@
 
 
 ```
-如果你尚没有接触过webpack，那么你对构建和打包的概念恐怕是模糊不清的。
-你可能更习惯使用开箱即用的脚手架来生成你的项目配置，或者迭代着某个项目的业务，却对它的开发/生产环境搭建知之甚少。
-要知道，前端架构最重要的点就在于前端工程化，而webpack则是我们搭建前端工程化环境的一个技术选型。
+如果你尚没有接触过webpack，那么你对构建和打包的概念恐怕是模糊不清的。你可能更习惯使用开箱即用的脚手架来生成你的项目配置，或者迭代着某个项目的业务，却对它的开发/生产环境搭建知之甚少。要知道，前端架构最重要的点就在于前端工程化，而webpack则是我们搭建前端工程化环境的一个技术选型。
 
 那么为什么是webpack呢?
 
-在github上搜索webpack的时候，repositories的数量是157k。
-事实上，无论是开源项目还是企业项目，最主流的前端工程化方案的技术选型都是webpack。
-而全新版本的webpack5，则是具备了比以往版本更强大的功能，甚至是诸多企业级前端工程化技术选型的不二选择。
+在github上搜索webpack的时候，repositories的数量是157k。事实上，无论是开源项目还是企业项目，最主流的前端工程化方案的技术选型都是webpack。而全新版本的webpack5，则是具备了比以往版本更强大的功能，甚至是诸多企业级前端工程化技术选型的不二选择。
 
 ```
 
@@ -406,4 +402,215 @@ worker.postMessage({
 worker.onmessage = ({ data: { answer } }) => {
     console.log(answer);
 };
+```
+
+### 2.4 多页面应用
+
+#### 2.4.1 entry 配置
+
+```javascript
+module.exports = {
+    entry: ['./src/file_ 1 .js', './src/file_ 2 .js'],
+    output: {
+        filename: 'bundle.js',
+    },
+};
+```
+```javascript
+module.exports = {
+    entry: {
+        app: './src/app.js',
+        adminApp: './src/adminApp.js',
+    },
+};
+```
+
+描述入口的对象。你可以使用如下属性：
+
+- `dependOn`: 当前入口所依赖的入口。它们必须在该入口被加载前被加载。
+
+- `filename`: 指定要输出的文件名称。
+
+- `import`: 启动时需加载的模块。
+
+- `library`: 指定 library 选项，为当前 entry 构建一个 library。
+
+- `runtime`: 运行时 chunk 的名字。如果设置了，就会创建一个新的运行时
+
+- `chunk`。在 webpack 5.43.0 之后可将其设为 false 以避免一个新的运行时chunk。
+
+- `publicPath`: 当该入口的输出文件在浏览器中被引用时，为它们指定一个公共
+
+- `URL 地址`。请查看 output.publicPath。
+
+
+#### 2.4.2 配置 index.html 模板
+
+```javascript
+module.exports = {
+    entry: 'index.js',
+    output: {
+        path: __dirname + '/dist',
+        filename: 'index_bundle.js'
+    },
+    plugins: [
+        new HtmlWebpackPlugin(), // Generates default index.html
+        new HtmlWebpackPlugin({ // Also generate a test.html
+        filename: 'test.html',
+        template: 'src/assets/test.html'
+        })
+    ]
+}
+```
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf- 8 "/>
+    <title><%= htmlWebpackPlugin.options.title %></title>
+</head>
+<body>
+</body>
+</html>
+```
+
+### 2.5 Tree shaking
+
+`tree shaking` 是一个术语，通常用于描述移除 JavaScript 上下文中的未引用代码(dead-code)。它依赖于 ES2015 模块语法的 静态结构 特性，例如 import 和 export。
+
+#### 2.5.1 tree-shaking实验
+
+##### src/math.js
+
+
+```javascript
+export function square(x) {
+    return x * x;
+}
+
+export function cube(x) {
+    return x * x * x;
+}
+```
+
+```javascript
+module.exports = {
+    entry: './src/index.js',
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+    },
+    mode: 'development',
+    optimization: {
+        usedExports: true,  // 优化，未使用的导出内容不会被生成
+    },
+};
+```
+
+`mode: production`打包后发现无用的代码全部都消失了。
+
+#### 2.5.2 sideEffects
+
+Webpack 认为这样的文件有“副作用”。具有副作用的文件不应该做 tree-shaking，因为这将破坏整个应用程序。
+
+
+它有三个可能的值：
+
+1. `true`如果不指定其他值的话。这意味着所有的文件都有副作用，也就是没有一个文件可以 tree-shaking。
+
+2. `false`告诉 Webpack 没有文件有副作用，所有文件都可以 tree-shaking。
+
+3. `数组[...]`是文件路径数组。它告诉 webpack，除了数组中包含的文件外，你的任何文件都没有副作用。因此，除了指定的文件之外，其他文件都可以安全地进行 tree-shaking。
+
+
+### 2.6 渐进式网络应用程序 PWA
+
+
+注意：默认情况下，`webpack DevServer` 会写入到内存。我们需要启用 `devserverdevmiddleware.writeToDisk` 配置项，来让 http-server 处理 ./dist 目 录中的文件。
+
+
+```javascript
+devServer: {
+    devMiddleware: {
+        index: true,
+        writeToDisk: true,
+    },
+},
+
+new WorkboxPlugin.GenerateSW({
+    // 这些选项帮助快速启用 ServiceWorkers
+    // 不允许遗留任何“旧的” ServiceWorkers
+    clientsClaim: true,
+    skipWaiting: true,
+    }),
+]
+```
+
+
+#### 2.6.3 注册 Service Worker
+
+接下来我们注册 `Service Worker`，使其出场并开始表演。通过添加以下注册代码来完成此操作：
+
+```javascript
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js').then(registration => {
+            console.log('SW registered: ', registration);
+        }).catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+        });
+    });
+}
+```
+
+### 2.7 shimming 预置依赖
+
+```javascript
+const webpack = require('webpack')
+
+module.exports = {
+    mode: 'development',
+    entry: './src/index.js',
+    plugins: [
+        new webpack.ProvidePlugin({
+            _: 'lodash'
+        })
+    ]
+}
+```
+
+#### 2.7.2 细粒度 Shimming
+
+一些遗留模块依赖的 **this 指向** 的是 window 对象。在接下来的用例中，调整我们的 index.js：当模块运行在 `CommonJS 上下文中`，这将会变成一个问题，也就是说此时的 `this指向的是 module.exports`。在这种情况下，你可以通过使用 `imports-loader` 覆盖 this 指向：
+
+
+```javascript
+const webpack = require('webpack')
+module.exports = {
+    mode: 'development',
+    entry: './src/index.js',
+    plugins: [
+        new webpack.ProvidePlugin({
+        // _: 'lodash'
+        join: ['lodash', 'join'],
+        })
+    ]
+}
+```
+
+#### 2.7.3 全局 Exports
+
+
+```javascript
+const file = 'example.txt';
+
+const helpers = {
+    test: function () {
+        console.log('test something')
+    },
+    parse: function () {
+        console.log('parse something')
+    },
+}
 ```
