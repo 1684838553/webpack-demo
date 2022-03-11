@@ -55,6 +55,7 @@ fetch('/api/hello')
     })
 
 
+// Web Works
 const worker = new Worker(new URL('./work.js', import.meta.url));
 worker.postMessage({
     question: 'hi，那边的workder线程，请告诉我今天的幸运数字是多少？',
@@ -62,3 +63,17 @@ worker.postMessage({
 worker.onmessage = ({ data: { answer } }) => {
     console.log(answer);
 };
+
+
+// 注册 Service Worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(registeration => {
+                console.log('SW注册成功：', registeration)
+            })
+            .catch(registerationError => {
+                console.log('SW注册失败：', registerationError)
+            })
+    })
+}
