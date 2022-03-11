@@ -2,6 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const WorkboxPlugin = require('workbox-webpack-plugin')
 
 module.exports = {
     entry: {
@@ -44,6 +45,9 @@ module.exports = {
         proxy: {
             "/api": "http://localhost:9000"
         },
+        devMiddleware: {
+            writeToDisk: true
+        }
         // https: true
     },
     plugins: [
@@ -57,7 +61,11 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'styles/[contenthash].css'
         }),
-        new BundleAnalyzerPlugin()
+        new BundleAnalyzerPlugin(),
+        new WorkboxPlugin.GenerateSW({
+            clientsClaim: true,
+            skipWaiting: true
+        })
     ],
     module: {
         rules: [
