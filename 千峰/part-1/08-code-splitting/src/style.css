@@ -1,0 +1,17 @@
+@font-face {
+  font-family: 'iconfont';
+  src: url('./assets/iconfont.ttf') format('truetype');
+}
+
+.icon {
+  font-family: 'iconfont';
+  font-size: 30px;
+}
+
+.hello {
+  color: red;
+}
+
+.block-bg {
+  background-image: url(./assets/webpack-logo.svg) !important;
+}

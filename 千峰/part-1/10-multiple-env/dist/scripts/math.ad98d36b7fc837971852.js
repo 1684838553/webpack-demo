@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfelixcourses=self.webpackChunkfelixcourses||[]).push([[600],{153:(e,u,s)=>{s.r(u),s.d(u,{add:()=>n,minus:()=>r});var n=function(e,u){return e+u},r=function(e,u){return e-u}}}]);
