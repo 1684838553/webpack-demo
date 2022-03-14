@@ -8,8 +8,14 @@ import './style.less'
 // import Notes from './assets/data.csv'
 import _ from 'lodash'
 import './async-module.js'
+import { craeteSpanElement } from './createElement'
+import $ from 'jquery'
 
-helloword()
+console.log($)
+
+// helloword()
+// webpack 配置 resolve.extensions，同名文件，先执行文件后缀在数组索引小的
+console.log(helloword)
 
 const img = document.createElement('img')
 img.src = imgSrc
@@ -39,3 +45,35 @@ document.body.appendChild(span)
 
 // console.log(Data, Notes)
 console.log(_.join(['index', 'module', 'loaded!'], ' '))
+
+
+fetch('/api/hello')
+    .then(res => res.text())
+    .then(res => {
+        console.log(res, 'res')
+        craeteSpanElement(res)
+    })
+
+
+// Web Works
+const worker = new Worker(new URL('./work.js', import.meta.url));
+worker.postMessage({
+    question: 'hi，那边的workder线程，请告诉我今天的幸运数字是多少？',
+});
+worker.onmessage = ({ data: { answer } }) => {
+    console.log(answer);
+};
+
+
+// 注册 Service Worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(registeration => {
+                console.log('SW注册成功：', registeration)
+            })
+            .catch(registerationError => {
+                console.log('SW注册失败：', registerationError)
+            })
+    })
+}
